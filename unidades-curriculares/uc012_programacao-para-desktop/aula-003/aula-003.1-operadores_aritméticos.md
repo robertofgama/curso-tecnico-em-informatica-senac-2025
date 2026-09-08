@@ -1,4 +1,4 @@
-# Aula 002 (03/09/2026) - Operadores Matemáticos
+# Aula 003 (03/09/2026) - Operadores Matemáticos
 
 > Os operadores são os símbolos que usamos para manipular os valores numéricos.
 
