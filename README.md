@@ -17,21 +17,27 @@ com **uma subpasta por matéria (unidade curricular)**:
 senac_curso-tecnico-em-informatica_2026/
 ├── README.md
 └── unidades-curriculares/
-    └── uc12_programacao-para-desktop/
-        ├── aula001.js
-        ├── aula002.js
+    └── uc012_programacao-para-desktop/
+        ├── README.md                    # cronograma e tópicos da unidade curricular
+        ├── aula-003/
+        │   ├── aula-003.1-operadores_aritméticos.md
+        │   └── aula-003.2_exercicios-operadores-resolucao.js
+        ├── aula-004/
+        │   └── ...
         └── ...
 ```
 
-O nome de cada subpasta segue o padrão `ucNN_nome-da-materia`, onde `NN` é o número
-da unidade curricular. Dentro dela, os arquivos são nomeados por aula
-(`aula001`, `aula002`, ...), na ordem em que o conteúdo foi apresentado.
+O nome de cada subpasta segue o padrão `ucNNN_nome-da-materia`, onde `NNN` é o número
+da unidade curricular com três dígitos (a UC 12 vira `uc012`). Dentro dela há **uma
+pasta por aula** (`aula-003`, `aula-004`, ...) e, em cada uma, os arquivos numerados na
+ordem em que o conteúdo foi apresentado: o material teórico com os exercícios em `.md`
+e as resoluções e anotações de aula em `.js`.
 
 ## 📚 Unidades curriculares
 
 | Unidade curricular              | Pasta                                                                                                        | Conteúdo                     |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------- |
-| UC12 — Programação para Desktop | [unidades-curriculares/uc12_programacao-para-desktop/](unidades-curriculares/uc12_programacao-para-desktop/) | Códigos e exemplos das aulas |
+| UC12 — Programação para Desktop | [unidades-curriculares/uc012_programacao-para-desktop/](unidades-curriculares/uc012_programacao-para-desktop/) | Códigos e exemplos das aulas |
 
 > A tabela é atualizada conforme novas unidades curriculares forem iniciadas ao
 > longo do ano.

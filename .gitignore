@@ -1,0 +1,17 @@
+# Marcadores e arquivos de sincronização (Syncthing)
+.stfolder/
+.stversions/
+.stignore
+*.sync-conflict-*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Node (caso alguma aula venha a usar dependências)
+node_modules/
