@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apresentação vertical</title>
+<!--
+  Atalho para a mesma apresentação em modo vertical (telas em pé, totem, tablet).
+  O conteúdo dos slides mora só em apresentacao.html — aqui não há cópia nenhuma.
+-->
+<meta http-equiv="refresh" content="0; url=apresentacao.html?tela=vertical">
+<style>
+  body{
+    margin:0;min-height:100vh;
+    display:grid;place-content:center;gap:1rem;justify-items:center;
+    padding:2rem;text-align:center;
+    background:#140f0b;color:#a3917a;
+    font-family:"Courier New",ui-monospace,monospace;
+    letter-spacing:.1em;text-transform:uppercase;
+  }
+  a{color:#f2a33c}
+</style>
+</head>
+<body>
+  <p>Carregando o bunker em modo vertical…</p>
+  <p><a href="apresentacao.html?tela=vertical">Abrir a apresentação</a></p>
+  <script>location.replace("apresentacao.html?tela=vertical");</script>
+</body>
+</html>

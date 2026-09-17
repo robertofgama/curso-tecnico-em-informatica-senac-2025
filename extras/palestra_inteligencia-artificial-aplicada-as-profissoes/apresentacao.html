@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manual de Sobrevivência à IA</title>
+<meta name="description" content="Palestra: Inteligência Artificial aplicada às profissões — Roberto Gama, Senac 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&family=VT323&display=swap">
+<style>
+  :root{
+    --asfalto:#140f0b;
+    --concreto:#1e1611;
+    --concreto-alto:#291e16;
+    --poeira:#eadfcc;
+    --poeira-fraca:#a3917a;
+    --ambar:#f2a33c;
+    --ferrugem:#c0521d;
+    --toxico:#b6e356;
+    --alerta:#ffd23f;
+    --linha:rgba(234,223,204,.16);
+
+    --fonte-display:"Black Ops One", Impact, "Arial Black", sans-serif;
+    --fonte-corpo:"Rajdhani", "Segoe UI", system-ui, sans-serif;
+    --fonte-mono:"VT323", "Courier New", ui-monospace, monospace;
+  }
+
+  *{box-sizing:border-box}
+
+  html,body{height:100%}
+
+  body{
+    margin:0;
+    overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 78% 8%, rgba(192,82,29,.20), transparent 60%),
+      radial-gradient(90% 70% at 10% 96%, rgba(182,227,86,.10), transparent 62%),
+      var(--asfalto);
+    color:var(--poeira);
+    font-family:var(--fonte-corpo);
+    font-size:clamp(16px,1.15vw,22px);
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- atmosfera ---------- */
+  #poeira{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+
+  .scanlines,
+  .vinheta{position:fixed;inset:0;pointer-events:none;z-index:6}
+
+  .scanlines{
+    background:repeating-linear-gradient(to bottom,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);
+    opacity:.35;
+    mix-blend-mode:multiply;
+  }
+
+  .vinheta{
+    background:radial-gradient(75% 65% at 50% 45%, transparent 40%, rgba(0,0,0,.72) 100%);
+    animation:piscar 7s steps(30) infinite;
+  }
+
+  @keyframes piscar{
+    0%,96%,100%{opacity:1}
+    97%{opacity:.86}
+    98%{opacity:1}
+    99%{opacity:.92}
+  }
+
+  /* ---------- HUD ---------- */
+  .hud{
+    position:fixed;left:0;right:0;top:0;z-index:8;
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    padding:calc(env(safe-area-inset-top,0px) + .9rem) clamp(1rem,2.4vw,2rem) .9rem;
+    font-family:var(--fonte-mono);
+    font-size:clamp(1rem,1.5vw,1.35rem);
+    letter-spacing:.06em;
+    color:var(--poeira-fraca);
+    text-transform:uppercase;
+  }
+
+  .hud-setor{display:flex;align-items:center;gap:.6rem;min-width:0}
+  .hud-setor .bolha{
+    width:.62em;height:.62em;border-radius:50%;
+    background:var(--toxico);box-shadow:0 0 10px var(--toxico);
+    animation:pulsar 2.4s ease-in-out infinite;flex:none;
+  }
+  .hud-setor span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  @keyframes pulsar{0%,100%{opacity:1}50%{opacity:.25}}
+
+  .hud-controles{display:flex;gap:.5rem;flex:none}
+
+  .hud-btn{
+    width:clamp(2.6rem,3.4vw,3.2rem);height:clamp(2.6rem,3.4vw,3.2rem);
+    display:grid;place-items:center;
+    background:linear-gradient(180deg,var(--concreto-alto),var(--concreto));
+    border:1px solid var(--linha);
+    border-radius:2px;
+    color:var(--ambar);
+    cursor:pointer;
+    transition:transform .14s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease;
+    clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
+  }
+  .hud-btn svg{width:45%;height:45%;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:square}
+  .hud-btn:hover:not([disabled]){color:var(--alerta);border-color:var(--ambar);box-shadow:0 0 18px rgba(242,163,60,.28)}
+  .hud-btn:active:not([disabled]){transform:translateY(2px)}
+  .hud-btn:focus-visible{outline:2px solid var(--toxico);outline-offset:3px}
+  .hud-btn[disabled]{opacity:.28;cursor:not-allowed}
+
+  /* ---------- rodapé ---------- */
+  .rodape{
+    position:fixed;left:0;right:0;bottom:0;z-index:8;
+    padding:0 0 calc(env(safe-area-inset-bottom,0px));
+  }
+  .rodape-info{
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    padding:.5rem clamp(1rem,2.4vw,2rem);
+    font-family:var(--fonte-mono);font-size:clamp(.95rem,1.4vw,1.25rem);
+    letter-spacing:.08em;text-transform:uppercase;color:var(--poeira-fraca);
+  }
+  .rodape-info .contador{color:var(--ambar);font-variant-numeric:tabular-nums;flex:none}
+  .rodape-info .marca{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .barra{height:5px;background:rgba(234,223,204,.08)}
+  .barra-fill{
+    height:100%;width:0;
+    background:linear-gradient(90deg,var(--ferrugem),var(--ambar) 70%,var(--alerta));
+    box-shadow:0 0 14px rgba(242,163,60,.55);
+    transition:width .5s cubic-bezier(.2,.8,.2,1);
+  }
+
+  /* ---------- slides ---------- */
+  .deck{position:fixed;inset:0;z-index:4}
+
+  .slide{
+    position:absolute;inset:0;
+    display:grid;align-content:center;justify-items:start;
+    padding:clamp(4.5rem,9vh,7rem) clamp(1rem,6vw,5rem) clamp(4rem,8vh,6rem);
+    overflow-y:auto;overflow-x:hidden;
+    opacity:0;visibility:hidden;pointer-events:none;
+    transform:translate3d(var(--x,9vw),0,0) scale(.975);
+    transition:opacity .42s ease,transform .55s cubic-bezier(.2,.8,.2,1),visibility 0s linear .55s;
+  }
+  .slide.ativo{
+    opacity:1;visibility:visible;pointer-events:auto;
+    transform:none;
+    transition:opacity .42s ease,transform .55s cubic-bezier(.2,.8,.2,1),visibility 0s;
+  }
+
+  .conteudo{width:min(1180px,100%);display:grid;gap:clamp(.9rem,2vh,1.6rem);justify-items:start}
+
+  .reveal{opacity:0;transform:translateY(18px)}
+  .slide.ativo .reveal{animation:surgir .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 85ms + 150ms)}
+
+  @keyframes surgir{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  /* ---------- tipografia ---------- */
+  .etiqueta{
+    margin:0;font-family:var(--fonte-mono);
+    font-size:clamp(1rem,1.7vw,1.5rem);letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ferrugem);
+  }
+  .etiqueta.toxica{color:var(--toxico)}
+
+  h1,h2,h3{margin:0;font-family:var(--fonte-display);font-weight:400;text-wrap:balance;line-height:1.02}
+
+  h1{font-size:clamp(2.4rem,7.2vw,6rem);letter-spacing:-.01em}
+  h2{font-size:clamp(1.9rem,4.4vw,3.6rem);color:var(--ambar);text-shadow:0 0 34px rgba(242,163,60,.28)}
+  h3{font-size:clamp(1.1rem,1.9vw,1.6rem);color:var(--poeira);letter-spacing:.02em}
+
+  .subtitulo{margin:0;max-width:56ch;font-size:clamp(1.05rem,2vw,1.7rem);color:var(--poeira-fraca)}
+
+  .lista{margin:0;padding:0;list-style:none;display:grid;gap:clamp(.55rem,1.4vh,1rem);max-width:64ch}
+  .lista li{position:relative;padding-left:1.9em;font-size:clamp(1.02rem,1.75vw,1.5rem)}
+  .lista li::before{
+    content:"▸";position:absolute;left:0;top:-.04em;
+    color:var(--ambar);font-size:1.1em;
+  }
+  .lista li b{color:var(--poeira);font-weight:700}
+
+  .destaque{
+    margin:0;max-width:62ch;
+    display:grid;gap:.35rem;
+    padding:clamp(.8rem,1.6vw,1.1rem) clamp(1rem,2vw,1.4rem);
+    border-left:4px solid var(--ferrugem);
+    background:linear-gradient(90deg,rgba(192,82,29,.20),rgba(192,82,29,0));
+    font-size:clamp(1.05rem,1.9vw,1.6rem);
+  }
+  .destaque em{
+    font-style:normal;font-family:var(--fonte-mono);
+    font-size:.82em;letter-spacing:.18em;text-transform:uppercase;color:var(--alerta);
+  }
+
+  /* ---------- painéis e grades ---------- */
+  .grade{display:grid;gap:clamp(.7rem,1.6vw,1.1rem);width:100%}
+  .grade.duas{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+  .grade.tres{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+
+  .painel{
+    display:grid;gap:.5rem;align-content:start;
+    padding:clamp(.9rem,1.9vw,1.4rem);
+    background:linear-gradient(170deg,rgba(41,30,22,.92),rgba(30,22,17,.92));
+    border:1px solid var(--linha);
+    clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
+  }
+  .painel p{margin:0;font-size:clamp(.98rem,1.5vw,1.28rem);color:var(--poeira-fraca)}
+  .painel .num{
+    font-family:var(--fonte-mono);font-size:clamp(1rem,1.5vw,1.3rem);
+    letter-spacing:.18em;color:var(--ferrugem);
+  }
+  .painel ul{margin:0;padding-left:1.1em;display:grid;gap:.3rem;font-size:clamp(.95rem,1.45vw,1.2rem);color:var(--poeira-fraca)}
+  .painel ul li::marker{color:var(--ambar)}
+
+  /* ---------- terminal ---------- */
+  .terminal{
+    width:min(720px,100%);
+    background:#0b0f0a;
+    border:1px solid rgba(182,227,86,.34);
+    box-shadow:inset 0 0 40px rgba(182,227,86,.07);
+    font-family:var(--fonte-mono);
+    color:var(--toxico);
+    font-size:clamp(1.02rem,1.6vw,1.4rem);
+    line-height:1.35;
+  }
+  .terminal .cabecalho{
+    padding:.25rem .8rem;
+    background:rgba(182,227,86,.12);
+    border-bottom:1px solid rgba(182,227,86,.24);
+    letter-spacing:.14em;text-transform:uppercase;color:var(--toxico);
+  }
+  .terminal pre{
+    margin:0;padding:.85rem 1rem;
+    overflow-x:auto;
+    font-family:inherit;font-size:inherit;
+    white-space:pre;
+  }
+  .terminal .alerta{color:var(--alerta)}
+  .terminal .perigo{color:var(--ferrugem)}
+
+  .nota{
+    margin:0;font-family:var(--fonte-mono);
+    font-size:clamp(.95rem,1.4vw,1.2rem);letter-spacing:.08em;
+    color:var(--poeira-fraca);
+  }
+
+  /* ---------- slide de capa ---------- */
+  .slide--capa{justify-items:start}
+  .slide--capa h1{
+    color:var(--ambar);
+    text-shadow:0 0 50px rgba(242,163,60,.35);
+    animation:tremeluz 6s steps(40) infinite;
+  }
+  @keyframes tremeluz{
+    0%,88%,100%{opacity:1}
+    90%{opacity:.7}
+    91%{opacity:1}
+    94%{opacity:.82}
+  }
+  .creditos{
+    margin:0;font-family:var(--fonte-mono);
+    font-size:clamp(1rem,1.6vw,1.4rem);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--poeira-fraca);
+  }
+  .teclas{display:flex;flex-wrap:wrap;gap:.5rem .9rem;margin:0;padding:0;list-style:none}
+  .teclas li{
+    font-family:var(--fonte-mono);font-size:clamp(.92rem,1.35vw,1.15rem);
+    letter-spacing:.1em;text-transform:uppercase;color:var(--poeira-fraca);
+  }
+  .teclas kbd{
+    font-family:var(--fonte-mono);font-size:1em;
+    padding:.05em .55em;margin-right:.35em;
+    border:1px solid var(--linha);border-bottom-width:3px;border-radius:3px;
+    background:var(--concreto-alto);color:var(--ambar);
+  }
+
+  /* ---------- slide de setor ---------- */
+  .slide--setor .conteudo{gap:clamp(.5rem,1.2vh,1rem)}
+  .setor-num{
+    font-family:var(--fonte-display);
+    font-size:clamp(5rem,20vw,15rem);line-height:.78;
+    color:transparent;
+    -webkit-text-stroke:2px rgba(242,163,60,.42);
+    letter-spacing:.02em;
+  }
+  .slide--setor h2{font-size:clamp(2.1rem,6vw,5rem);color:var(--poeira);text-shadow:none}
+  .faixa-risco{
+    width:min(560px,100%);height:14px;
+    background:repeating-linear-gradient(45deg,var(--alerta) 0 14px,var(--asfalto) 14px 28px);
+    opacity:.8;
+  }
+
+  /* ---------- slide final ---------- */
+  .slide--fim h1{color:var(--toxico);text-shadow:0 0 44px rgba(182,227,86,.3)}
+
+  /* ---------- toque / mobile ---------- */
+  @media (max-width:640px){
+    .rodape-info .marca{display:none}
+    .setor-num{-webkit-text-stroke-width:1.5px}
+  }
+
+  /* ---------- telas verticais: totem, TV em pé, tablet, celular ----------
+     Mesmo conteúdo, outra diagramação. A classe .vertical entra sozinha
+     quando a tela é mais alta do que larga (ou à força, com ?tela=vertical). */
+  body.vertical{font-size:clamp(17px,1.9vw,26px)}
+
+  body.vertical .slide{
+    padding:clamp(5rem,10vh,9rem) clamp(1rem,5vw,3.2rem) clamp(4.5rem,9vh,8rem);
+  }
+  body.vertical .conteudo{gap:clamp(1.1rem,2.6vh,2.2rem)}
+
+  body.vertical h1{font-size:clamp(2.6rem,10.5vw,7.5rem)}
+  body.vertical h2{font-size:clamp(2rem,6.6vw,5.2rem)}
+  body.vertical h3{font-size:clamp(1.15rem,3vw,2.1rem)}
+  body.vertical .subtitulo{font-size:clamp(1.1rem,3.1vw,2.2rem);max-width:40ch}
+  body.vertical .etiqueta{font-size:clamp(1rem,2.6vw,1.9rem)}
+
+  body.vertical .lista{max-width:100%;gap:clamp(.7rem,1.9vh,1.4rem)}
+  body.vertical .lista li{font-size:clamp(1.08rem,2.95vw,2.05rem);padding-left:1.7em}
+
+  body.vertical .destaque{
+    max-width:100%;
+    font-size:clamp(1.1rem,3vw,2.1rem);
+    padding:clamp(1rem,2.6vw,1.6rem) clamp(1.1rem,3vw,1.8rem);
+    border-left-width:6px;
+  }
+
+  /* em pé o espaço é de altura, não de largura: cartões empilham */
+  body.vertical .grade.duas{grid-template-columns:1fr}
+  body.vertical .grade.tres{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body.vertical .grade{gap:clamp(.8rem,2.2vw,1.4rem)}
+  body.vertical .painel{padding:clamp(1rem,2.6vw,1.6rem)}
+  body.vertical .painel p,
+  body.vertical .painel ul{font-size:clamp(1rem,2.5vw,1.7rem)}
+  body.vertical .painel .num{font-size:clamp(1rem,2.3vw,1.6rem)}
+
+  body.vertical .terminal{width:100%;font-size:clamp(1rem,2.45vw,1.75rem)}
+  body.vertical .nota{font-size:clamp(.95rem,2.2vw,1.5rem)}
+  body.vertical .creditos{font-size:clamp(1rem,2.4vw,1.7rem)}
+  body.vertical .teclas li{font-size:clamp(.95rem,2.2vw,1.5rem)}
+
+  body.vertical .setor-num{font-size:clamp(7rem,32vw,24rem);-webkit-text-stroke-width:3px}
+  body.vertical .slide--setor h2{font-size:clamp(2.2rem,8.4vw,6.5rem)}
+  body.vertical .faixa-risco{width:min(100%,640px);height:clamp(14px,2.4vw,22px)}
+
+  body.vertical .hud{font-size:clamp(1rem,2.3vw,1.6rem)}
+  body.vertical .hud-btn{width:clamp(3rem,7.5vw,5rem);height:clamp(3rem,7.5vw,5rem)}
+  body.vertical .rodape-info{font-size:clamp(1rem,2.3vw,1.6rem)}
+  body.vertical .barra{height:8px}
+
+  /* vertical e estreito (celular): uma coluna só */
+  @media (max-width:620px){
+    body.vertical .grade.tres{grid-template-columns:1fr}
+    body.vertical .setor-num{-webkit-text-stroke-width:2px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition-duration:.001s!important}
+    .reveal{opacity:1;transform:none}
+    #poeira{display:none}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="poeira" aria-hidden="true"></canvas>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="vinheta" aria-hidden="true"></div>
+
+<header class="hud">
+  <div class="hud-setor"><i class="bolha" aria-hidden="true"></i><span id="setor">Transmissão de emergência</span></div>
+  <nav class="hud-controles" aria-label="Navegação dos slides">
+    <button class="hud-btn" id="btn-voltar" type="button" aria-label="Slide anterior" title="Slide anterior (←)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4 7 12l8 8"></path></svg>
+    </button>
+    <button class="hud-btn" id="btn-avancar" type="button" aria-label="Próximo slide" title="Próximo slide (espaço)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l8 8-8 8"></path></svg>
+    </button>
+  </nav>
+</header>
+
+<main class="deck" id="deck">
+
+  <!-- 01 -->
+  <section class="slide slide--capa ativo" data-setor="Transmissão de emergência">
+    <div class="conteudo">
+      <p class="etiqueta reveal">▲ Rádio Bunker 107,7 FM · sinal instável</p>
+      <h1 class="reveal">Manual de<br>Sobrevivência à IA</h1>
+      <p class="subtitulo reveal">Inteligência Artificial aplicada às profissões — inclusive à sua. Guia prático para não virar poeira radioativa nem comprar curso de milagreiro.</p>
+      <p class="creditos reveal">Roberto Gama · Senac · Curso Técnico em Informática · 2026</p>
+      <ul class="teclas reveal">
+        <li><kbd>espaço</kbd>avançar</li>
+        <li><kbd>←</kbd>voltar</li>
+        <li><kbd>F</kbd>tela cheia</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="slide" data-setor="Mapa do bunker">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Planta baixa · abrigo subterrâneo</p>
+      <h2 class="reveal">Mapa do bunker</h2>
+      <div class="grade tres reveal">
+        <article class="painel"><span class="num">Setor 01</span><h3>A IA vai acabar com o meu emprego?</h3><p>Dinheiro, energia e a conta que alguém está pagando.</p></article>
+        <article class="painel"><span class="num">Setor 02</span><h3>A Skynet chegou?</h3><p>AGI, marketing e previsões que nunca vencem.</p></article>
+        <article class="painel"><span class="num">Setor 03</span><h3>Afinal, o que diabos é IA?</h3><p>Estatística, alucinação e o mito da máquina infalível.</p></article>
+        <article class="painel"><span class="num">Setor 04</span><h3>Como ela pode me ajudar?</h3><p>Seis profissões, seis usos que funcionam hoje.</p></article>
+        <article class="painel"><span class="num">Setor 05</span><h3>"Ah, que legal, mais coisas pra aprender."</h3><p>Profissões novas, hype e caça ao milagreiro.</p></article>
+      </div>
+      <p class="nota reveal">Tempo estimado de transmissão: enquanto o gerador aguentar.</p>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="slide slide--setor" data-setor="Setor 01 · Emprego">
+    <div class="conteudo">
+      <div class="faixa-risco reveal" aria-hidden="true"></div>
+      <p class="setor-num reveal" aria-hidden="true">01</p>
+      <h2 class="reveal">A IA vai acabar com o meu emprego?</h2>
+      <p class="subtitulo reveal">Spoiler: a resposta tem um "depende" escrito com tinta fosforescente.</p>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="slide" data-setor="Setor 01 · Emprego">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 01 · economia do escombro</p>
+      <h2 class="reveal">O custo por token é realmente real?</h2>
+      <ul class="lista">
+        <li class="reveal"><b>Token</b> é o pedacinho de palavra que o modelo lê e escreve — mais ou menos 4 caracteres. "Sobrevivência" gasta uns 4 ou 5.</li>
+        <li class="reveal">Cada resposta é GPU girando, energia queimando e água resfriando data center. <b>Nada disso é de graça.</b></li>
+        <li class="reveal">Parece barato porque você olha o <em>seu</em> uso. Agora multiplique por centenas de milhões de pessoas fazendo a mesma pergunta boba.</li>
+      </ul>
+      <div class="terminal reveal">
+        <div class="cabecalho">&gt; custo_estimado --modelo=topo-de-linha</div>
+<pre>  entrada .......... US$  3,00 / 1.000.000 tokens
+  saída ............ US$ 15,00 / 1.000.000 tokens
+  seu "oi, tudo bem?" .......... ~US$ 0,00002
+<span class="alerta">  AVISO:</span> x 1.000.000.000 de "ois" = uma usina.</pre>
+      </div>
+      <p class="nota reveal">* Valores ilustrativos: mudam a cada lançamento. A ordem de grandeza, não.</p>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="slide" data-setor="Setor 01 · Emprego">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 02 · inventário do gerador</p>
+      <h2 class="reveal">O que é preciso para rodar um modelo?</h2>
+      <ul class="lista">
+        <li class="reveal"><b>Treinar:</b> milhares de GPUs por semanas ou meses. Conta de luz de cidade pequena, refrigeração de indústria.</li>
+        <li class="reveal"><b>Usar (inferência):</b> os modelos grandes pedem dezenas de gigabytes de memória de vídeo. Não cabe no seu notebook.</li>
+        <li class="reveal"><b>Na sua máquina dá, sim:</b> modelos pequenos rodam local e são úteis — só não são o mesmo bicho do anúncio.</li>
+        <li class="reveal">Por isso quase tudo é na nuvem: você está <b>alugando o forninho de alguém</b>.</li>
+      </ul>
+      <div class="terminal reveal">
+        <div class="cabecalho">&gt; requisitos_minimos_do_sistema</div>
+<pre>  [ok] notebook e internet ............. você
+  [<span class="perigo">!!</span>] um data center refrigerado ...... eles
+  [<span class="perigo">!!</span>] energia de uma cidade média ..... eles
+  [ok] café ............................ nós dois</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="slide" data-setor="Setor 01 · Emprego">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 03 · quem banca a festa</p>
+      <h2 class="reveal">Se eu não pago, quem está pagando?</h2>
+      <div class="grade tres reveal">
+        <article class="painel"><span class="num">Fonte A</span><h3>Investidor</h3><p>Bilhões apostados para capturar mercado agora e cobrar depois. É corrida por território, não caridade.</p></article>
+        <article class="painel"><span class="num">Fonte B</span><h3>Quem assina o plano pago</h3><p>A minoria que paga sustenta a maioria que usa de graça. Modelo de academia.</p></article>
+        <article class="painel"><span class="num">Fonte C</span><h3>Você, em outra moeda</h3><p>Uso, hábito, dados e dependência. O plano gratuito te ensina a não conseguir mais trabalhar sem aquilo.</p></article>
+      </div>
+      <p class="destaque reveal"><em>Regra do bunker nº 1</em>Grátis hoje é uma decisão comercial, não uma lei da natureza. Nunca construa um processo crítico em cima de um preço que não é seu.</p>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section class="slide" data-setor="Setor 01 · Emprego">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 04 · protocolo de voo</p>
+      <h2 class="reveal">O paradigma do copiloto</h2>
+      <ul class="lista">
+        <li class="reveal"><b>O medo:</b> substituição em massa, desemprego instantâneo, fila no bunker.</li>
+        <li class="reveal"><b>A realidade que dá pra medir hoje:</b> ganho de produtividade e apoio à decisão — com gente no comando.</li>
+        <li class="reveal">A IA não assume o volante. Ela lê o mapa, sugere o desvio e avisa do buraco. <b>Errar o caminho continua sendo mérito seu.</b></li>
+        <li class="reveal">Quem decide, assina embaixo e responde pelo resultado ainda é gente. Inclusive juridicamente.</li>
+      </ul>
+      <p class="destaque reveal"><em>Frase de para-choque</em>A IA provavelmente não vai tomar o seu emprego. Alguém que sabe usar IA, talvez.</p>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section class="slide slide--setor" data-setor="Setor 02 · Skynet">
+    <div class="conteudo">
+      <div class="faixa-risco reveal" aria-hidden="true"></div>
+      <p class="setor-num reveal" aria-hidden="true">02</p>
+      <h2 class="reveal">A IA vai acabar com o mundo?<br>A Skynet chegou?</h2>
+      <p class="subtitulo reveal">Verificando os céus em busca de caveiras de metal… nada por enquanto.</p>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section class="slide" data-setor="Setor 02 · Skynet">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 05 · radar de longo alcance</p>
+      <h2 class="reveal">Já existe AGI? Quando ela vem?</h2>
+      <ul class="lista">
+        <li class="reveal"><b>AGI</b> = inteligência artificial geral, capaz de qualquer tarefa intelectual humana. <b>Não existe.</b></li>
+        <li class="reveal">Pior: não existe nem definição fechada do que contaria como AGI. Cada empresa usa a régua que lhe convém.</li>
+        <li class="reveal">"Faltam uns dois anos" é a previsão mais repetida da área… desde os anos 1960.</li>
+        <li class="reveal">O que existe hoje: modelos muito bons em prever o próximo pedaço de texto. <b>Impressionante não é o mesmo que consciente.</b></li>
+      </ul>
+      <div class="terminal reveal">
+        <div class="cabecalho">&gt; scanner_de_ameacas --regiao=planeta</div>
+<pre>  ameaça "Skynet" ................ <span class="alerta">BAIXA</span>
+  ameaça "planilha errada com
+  cara de certa" ................. <span class="perigo">ALTA</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide" data-setor="Setor 02 · Skynet">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 06 · propaganda no rádio</p>
+      <h2 class="reveal">"Mas a empresa disse que o modelo dela faz e acontece"</h2>
+      <ul class="lista">
+        <li class="reveal">Todo lançamento vem com benchmark novo, gráfico de barra subindo e um adjetivo inédito.</li>
+        <li class="reveal"><b>Benchmark é prova de vestibular.</b> O seu trabalho é o plantão de segunda-feira de manhã.</li>
+        <li class="reveal">Leia o rodapé: quem fez o teste, com qual versão, com quantas tentativas e a que custo.</li>
+        <li class="reveal">Ceticismo saudável não é negação: é <b>testar no seu caso real</b>, com dados que você sabe conferir.</li>
+      </ul>
+      <p class="destaque reveal"><em>Regra do bunker nº 2</em>Quem anuncia o produto não é quem vai usar ele às 23h para fechar o relatório. Esse é você.</p>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide slide--setor" data-setor="Setor 03 · O que é IA">
+    <div class="conteudo">
+      <div class="faixa-risco reveal" aria-hidden="true"></div>
+      <p class="setor-num reveal" aria-hidden="true">03</p>
+      <h2 class="reveal">Afinal, o que diabos é IA?</h2>
+      <p class="subtitulo reveal">Abrindo o painel e olhando os fios. Aviso: tem menos mágica do que você esperava.</p>
+    </div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide" data-setor="Setor 03 · O que é IA">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 07 · manual técnico</p>
+      <h2 class="reveal">IA tradicional × IA generativa</h2>
+      <div class="grade duas reveal">
+        <article class="painel">
+          <span class="num">Modelo A</span>
+          <h3>Tradicional: analisa e prevê</h3>
+          <p>Estatística clássica bem treinada. A pergunta é "qual a chance disso?".</p>
+          <ul>
+            <li>Filtro de spam do seu e-mail</li>
+            <li>Score de crédito</li>
+            <li>Recomendação do streaming</li>
+            <li>Previsão de demanda do estoque</li>
+          </ul>
+        </article>
+        <article class="painel">
+          <span class="num">Modelo B</span>
+          <h3>Generativa: cria conteúdo novo</h3>
+          <p>Também estatística. A pergunta é "qual o próximo pedaço mais provável?".</p>
+          <ul>
+            <li>Texto, resumo e tradução</li>
+            <li>Código e scripts</li>
+            <li>Imagem, áudio e vídeo</li>
+            <li>Conversa com cara de gente</li>
+          </ul>
+        </article>
+      </div>
+      <p class="nota reveal">Uma classifica o mundo. A outra completa a frase. Nenhuma das duas entende o mundo.</p>
+    </div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide" data-setor="Setor 03 · O que é IA">
+    <div class="conteudo">
+      <p class="etiqueta toxica reveal">Registro 08 · contaminação detectada</p>
+      <h2 class="reveal">O que é alucinação?</h2>
+      <ul class="lista">
+        <li class="reveal">O modelo não mente — mentir exige saber a verdade. Ele <b>completa o texto mais provável</b>.</li>
+        <li class="reveal">Quando falta informação, ele preenche o buraco com algo que <b>parece</b> certo. Formato impecável, conteúdo inventado.</li>
+        <li class="reveal">Casos reais: advogados citando jurisprudência que nunca existiu; código chamando função que nunca foi escrita.</li>
+        <li class="reveal">Quanto mais específico, recente ou obscuro o dado, <b>maior o risco</b>. É justamente onde você mais precisa dele.</li>
+      </ul>
+      <p class="destaque reveal"><em>Sintoma clássico</em>Ele nunca vai dizer "não sei" com a mesma convicção com que diz uma bobagem enorme.</p>
+    </div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide" data-setor="Setor 03 · O que é IA">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 09 · protocolo de segurança</p>
+      <h2 class="reveal">A IA está sempre certa?</h2>
+      <ul class="lista">
+        <li class="reveal">Não. E o detalhe cruel: <b>ela erra com a mesma voz confiante</b> com que acerta.</li>
+        <li class="reveal">Confiança não é competência. O tom seguro é estilo de escrita, não garantia de verdade.</li>
+        <li class="reveal">Use com força no que você <b>sabe avaliar</b>. No resto, use para aprender a avaliar — e confira na fonte.</li>
+        <li class="reveal">Rode o código. Confira o número. Leia a lei. Ligue para o fornecedor.</li>
+      </ul>
+      <p class="destaque reveal"><em>Regra do bunker nº 3</em>Quem assina embaixo é você. A IA não vai ao RH, não perde o cliente e não responde processo.</p>
+    </div>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide slide--setor" data-setor="Setor 04 · Ferramentas">
+    <div class="conteudo">
+      <div class="faixa-risco reveal" aria-hidden="true"></div>
+      <p class="setor-num reveal" aria-hidden="true">04</p>
+      <h2 class="reveal">Já entendi, estamos seguros!<br>Agora, como a IA me ajuda?</h2>
+      <p class="subtitulo reveal">Hora de abrir o armário de ferramentas do abrigo. Seis estações, seis usos que funcionam hoje.</p>
+    </div>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide" data-setor="Setor 04 · Ferramentas">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Estação 01 · oficina</p>
+      <h2 class="reveal">Desenvolvimento de software e TI</h2>
+      <ul class="lista">
+        <li class="reveal"><b>Testes automatizados</b> e aqueles casos de borda que ninguém lembra de escrever.</li>
+        <li class="reveal"><b>Revisão de arquitetura:</b> um segundo par de olhos disponível às duas da manhã.</li>
+        <li class="reveal"><b>Scripts de infraestrutura</b>, Docker, pipeline de CI — o trabalho chato que você vem adiando.</li>
+        <li class="reveal"><b>Assistente na codificação diária:</b> menos tempo em "como era a sintaxe mesmo?".</li>
+      </ul>
+      <p class="destaque reveal"><em>Atenção</em>Código gerado é rascunho, não entrega. Se você não entende o que ele escreveu, você não pode defender em produção.</p>
+    </div>
+  </section>
+
+  <!-- 17 -->
+  <section class="slide" data-setor="Setor 04 · Ferramentas">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Estação 02 · sala de aula</p>
+      <h2 class="reveal">Educação e docência</h2>
+      <ul class="lista">
+        <li class="reveal"><b>Plano de aula estruturado</b> em minutos — e você ajusta para a sua turma, que ela não conhece.</li>
+        <li class="reveal"><b>Exercícios práticos com gabarito</b>, em três níveis de dificuldade, sem repetir enunciado.</li>
+        <li class="reveal"><b>Feedback preliminar em lote</b>; a correção final e a conversa continuam suas.</li>
+        <li class="reveal">Explicar o mesmo conceito de cinco jeitos diferentes até o aluno pegar — sem perder a paciência.</li>
+      </ul>
+      <p class="destaque reveal"><em>Não terceirize isto</em>A IA prepara material. Quem ensina, percebe quem está perdido e segura a turma é gente.</p>
+    </div>
+  </section>
+
+  <!-- 18 -->
+  <section class="slide" data-setor="Setor 04 · Ferramentas">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Estação 03 · posto de troca</p>
+      <h2 class="reveal">Empreendedorismo e gestão</h2>
+      <ul class="lista">
+        <li class="reveal"><b>Análise rápida de dados:</b> controle de suprimentos, sazonalidade, ruptura de estoque.</li>
+        <li class="reveal"><b>Atendimento inicial automatizado</b> (chatbot) — para filtrar o repetitivo, nunca para esconder o humano.</li>
+        <li class="reveal"><b>Precificação e cenários:</b> simular margem, desconto e ponto de equilíbrio antes de errar com dinheiro real.</li>
+        <li class="reveal">Rascunho de proposta, contrato e daquele e-mail difícil que você está evitando desde terça.</li>
+      </ul>
+      <p class="destaque reveal"><em>Atenção</em>A decisão de negócio continua sua. O prejuízo também — e ele não aceita "a IA que sugeriu" como justificativa.</p>
+    </div>
+  </section>
+
+  <!-- 19 -->
+  <section class="slide" data-setor="Setor 04 · Ferramentas">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Estação 04 · enfermaria</p>
+      <h2 class="reveal">Saúde e medicina</h2>
+      <ul class="lista">
+        <li class="reveal"><b>Triagem otimizada:</b> organizar quem precisa ser atendido primeiro quando a fila dobra.</li>
+        <li class="reveal"><b>Apoio em diagnóstico por imagem:</b> sinalizar o que merece um segundo olhar. Apoio, não laudo.</li>
+        <li class="reveal"><b>Prontuário eletrônico:</b> resumir histórico, achar o exame perdido, padronizar registro.</li>
+        <li class="reveal">Menos tempo digitando, mais tempo olhando para o paciente.</li>
+      </ul>
+      <p class="destaque reveal"><em>Regra de ouro</em>A IA sugere. O profissional de saúde decide, assina e responde. Sempre nessa ordem.</p>
+    </div>
+  </section>
+
+  <!-- 20 -->
+  <section class="slide" data-setor="Setor 04 · Ferramentas">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Estação 05 · ateliê</p>
+      <h2 class="reveal">Economia criativa: design e marketing</h2>
+      <ul class="lista">
+        <li class="reveal"><b>Prototipagem rápida de interface:</b> do rabisco no papel para a tela clicável em minutos.</li>
+        <li class="reveal"><b>Dez variações de copy</b> para a mesma campanha, prontas para teste A/B.</li>
+        <li class="reveal"><b>Moodboard e exploração visual</b> antes de gastar o dia no trabalho fino.</li>
+        <li class="reveal">Ótima para a quantidade que antecede a qualidade: gerar muito, descartar quase tudo.</li>
+      </ul>
+      <p class="destaque reveal"><em>Continua humano</em>O gosto, a direção e o "isso aqui ficou sem alma". A IA não tem repertório próprio — tem média.</p>
+    </div>
+  </section>
+
+  <!-- 21 -->
+  <section class="slide" data-setor="Setor 04 · Ferramentas">
+    <div class="conteudo">
+      <p class="etiqueta toxica reveal">Estação 06 · biblioteca do abrigo</p>
+      <h2 class="reveal">Aprendizagem: um tutor só seu</h2>
+      <ul class="lista">
+        <li class="reveal">Um <b>tutor especialista 100% presente</b>, que não faz cara feia quando você pergunta a mesma coisa pela quarta vez.</li>
+        <li class="reveal">Explica no seu nível, no seu ritmo e com exemplos do <b>seu</b> contexto — futebol, cozinha, oficina, o que for.</li>
+        <li class="reveal">Peça para ela <b>te fazer perguntas</b>, corrigir seu raciocínio e propor exercícios. Não só entregar a resposta.</li>
+        <li class="reveal">Traduz erro de compilador e documentação hostil para português de gente.</li>
+      </ul>
+      <p class="destaque reveal"><em>Armadilha mortal</em>Deixar a IA pensar por você é ir à academia e ficar vendo o outro levantar o peso. Você sai de lá igualzinho.</p>
+    </div>
+  </section>
+
+  <!-- 22 -->
+  <section class="slide slide--setor" data-setor="Setor 05 · Hype">
+    <div class="conteudo">
+      <div class="faixa-risco reveal" aria-hidden="true"></div>
+      <p class="setor-num reveal" aria-hidden="true">05</p>
+      <h2 class="reveal">"Ah, que legal,<br>mais coisas para aprender."</h2>
+      <p class="subtitulo reveal">(frase dita com muito sarcasmo, no melhor tom de quem já sobreviveu a três apocalipses tecnológicos)</p>
+    </div>
+  </section>
+
+  <!-- 23 -->
+  <section class="slide" data-setor="Setor 05 · Hype">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 10 · vagas no mural do abrigo</p>
+      <h2 class="reveal">Profissões saindo dos escombros</h2>
+      <div class="grade tres reveal">
+        <article class="painel"><h3>Engenharia de prompt e contexto</h3><p>Saber pedir, dar contexto e montar o cenário em que o modelo acerta.</p></article>
+        <article class="painel"><h3>Avaliação e qualidade de modelos</h3><p>Medir se a resposta presta, criar testes, comparar versões sem cair no marketing.</p></article>
+        <article class="painel"><h3>Ética, governança e conformidade</h3><p>LGPD, viés, dados sensíveis, rastreabilidade. Área que só cresce.</p></article>
+        <article class="painel"><h3>Automação e integração</h3><p>Agentes, APIs, fluxos que ligam a IA aos sistemas que já existem.</p></article>
+        <article class="painel"><h3>Curadoria de dados</h3><p>O trabalho invisível que sustenta tudo. Dado ruim entra, bobagem sai.</p></article>
+        <article class="painel"><h3>Tradutor entre negócio e modelo</h3><p>Quem entende do problema real e sabe o que dá para automatizar.</p></article>
+      </div>
+      <p class="nota reveal">Nenhuma delas dispensa a base: lógica, dados, algoritmo e saber o que você está fazendo.</p>
+    </div>
+  </section>
+
+  <!-- 24 -->
+  <section class="slide" data-setor="Setor 05 · Hype">
+    <div class="conteudo">
+      <p class="etiqueta reveal">Registro 11 · detector de radiação</p>
+      <h2 class="reveal">Triagem: fundamento × hype</h2>
+      <div class="grade duas reveal">
+        <article class="painel">
+          <span class="num">Teste de campo</span>
+          <h3>Três perguntas antes de embarcar</h3>
+          <ul>
+            <li>Resolve um problema que eu já tinha?</li>
+            <li>Consigo medir o resultado em número?</li>
+            <li>Funciona fora da demonstração do vídeo?</li>
+          </ul>
+        </article>
+        <article class="painel">
+          <span class="num">Alerta de mutante</span>
+          <h3>Sinais de milagreiro</h3>
+          <ul>
+            <li>Promessa de renda passiva em 30 dias</li>
+            <li>"Substitui a faculdade" por R$ 97</li>
+            <li>"A IA faz tudo sozinha por você"</li>
+            <li>Print de resultado sem fonte nem data</li>
+          </ul>
+        </article>
+      </div>
+      <p class="destaque reveal"><em>Regra do bunker nº 4</em>Hype passa. Fundamento fica. O milagreiro muda de assunto assim que o hype acaba — e vende outro curso.</p>
+    </div>
+  </section>
+
+  <!-- 25 -->
+  <section class="slide slide--fim" data-setor="Fim da transmissão">
+    <div class="conteudo">
+      <p class="etiqueta toxica reveal">Sinal se perdendo… kkkssshhh</p>
+      <h1 class="reveal">Fim da transmissão</h1>
+      <ul class="lista">
+        <li class="reveal">A IA não é a bomba. É a <b>lanterna</b>.</li>
+        <li class="reveal">Lanterna continua precisando de alguém que saiba <b>para onde apontar</b>.</li>
+        <li class="reveal">Aprenda a usar com critério — e confira tudo antes de assinar embaixo.</li>
+      </ul>
+      <p class="destaque reveal"><em>Sobreviventes</em>Perguntas? O gerador ainda aguenta uns dez minutos.</p>
+      <p class="creditos reveal">Roberto Gama · Senac · Curso Técnico em Informática · 2026</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <div class="rodape-info">
+    <span class="marca">IA aplicada às profissões · Senac 2026</span>
+    <span class="contador" id="contador">01 / 25</span>
+  </div>
+  <div class="barra"><div class="barra-fill" id="barra"></div></div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var deck = document.getElementById("deck");
+  var slides = Array.prototype.slice.call(deck.querySelectorAll(".slide"));
+  var btnVoltar = document.getElementById("btn-voltar");
+  var btnAvancar = document.getElementById("btn-avancar");
+  var contador = document.getElementById("contador");
+  var barra = document.getElementById("barra");
+  var setor = document.getElementById("setor");
+  var atual = 0;
+
+  // Indexa os elementos animados de cada slide para escalonar a entrada.
+  slides.forEach(function (slide) {
+    slide.querySelectorAll(".reveal").forEach(function (el, i) {
+      el.style.setProperty("--i", i);
+    });
+  });
+
+  // ---------- formato da tela: deitada ou em pé ----------
+  // Sem parâmetro, decide sozinho pela proporção da tela.
+  // Com ?tela=vertical (ou ?tela=horizontal), manda o parâmetro.
+  var formatoFixo = null;
+  if (/[?&]tela=vertical\b/.test(location.search)) formatoFixo = "vertical";
+  if (/[?&]tela=horizontal\b/.test(location.search)) formatoFixo = "horizontal";
+
+  function aplicarFormato() {
+    var emPe = formatoFixo ? formatoFixo === "vertical" : window.innerHeight > window.innerWidth;
+    document.body.classList.toggle("vertical", emPe);
+  }
+
+  function alternarFormato() {
+    formatoFixo = document.body.classList.contains("vertical") ? "horizontal" : "vertical";
+    aplicarFormato();
+  }
+
+  function doisDigitos(n) {
+    return n < 10 ? "0" + n : String(n);
+  }
+
+  function atualizarHud() {
+    contador.textContent = doisDigitos(atual + 1) + " / " + doisDigitos(slides.length);
+    barra.style.width = ((atual + 1) / slides.length) * 100 + "%";
+    setor.textContent = slides[atual].dataset.setor || "";
+    btnVoltar.disabled = atual === 0;
+    btnAvancar.disabled = atual === slides.length - 1;
+    try {
+      history.replaceState(null, "", "#s" + (atual + 1));
+    } catch (e) {
+      /* file:// sem permissão de history: segue o baile */
+    }
+  }
+
+  function ir(destino) {
+    if (destino < 0 || destino >= slides.length || destino === atual) return;
+
+    var avancando = destino > atual;
+    var anterior = slides[atual];
+    var proximo = slides[destino];
+
+    // Posiciona o slide que entra do lado certo antes de ativá-lo.
+    proximo.style.setProperty("--x", avancando ? "9vw" : "-9vw");
+    void proximo.offsetWidth; // força o recálculo para a transição sair do lugar certo
+    proximo.classList.add("ativo");
+
+    anterior.style.setProperty("--x", avancando ? "-9vw" : "9vw");
+    anterior.classList.remove("ativo");
+    anterior.scrollTop = 0;
+
+    atual = destino;
+    atualizarHud();
+  }
+
+  function avancar() { ir(atual + 1); }
+  function voltar() { ir(atual - 1); }
+
+  btnAvancar.addEventListener("click", avancar);
+  btnVoltar.addEventListener("click", voltar);
+
+  function telaCheia() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    }
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+    var tecla = e.key;
+
+    if (tecla === " " || tecla === "Spacebar" || tecla === "ArrowRight" || tecla === "ArrowDown" || tecla === "PageDown" || tecla === "Enter") {
+      e.preventDefault();
+      avancar();
+    } else if (tecla === "ArrowLeft" || tecla === "ArrowUp" || tecla === "PageUp" || tecla === "Backspace") {
+      e.preventDefault();
+      voltar();
+    } else if (tecla === "Home") {
+      e.preventDefault();
+      ir(0);
+    } else if (tecla === "End") {
+      e.preventDefault();
+      ir(slides.length - 1);
+    } else if (tecla === "f" || tecla === "F") {
+      e.preventDefault();
+      telaCheia();
+    } else if (tecla === "v" || tecla === "V") {
+      e.preventDefault();
+      alternarFormato();
+    }
+  });
+
+  // Deslizar o dedo funciona no tablet e na TV com touch.
+  var toqueX = 0, toqueY = 0;
+  deck.addEventListener("touchstart", function (e) {
+    toqueX = e.changedTouches[0].clientX;
+    toqueY = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  deck.addEventListener("touchend", function (e) {
+    var dx = e.changedTouches[0].clientX - toqueX;
+    var dy = e.changedTouches[0].clientY - toqueY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) { avancar(); } else { voltar(); }
+    }
+  }, { passive: true });
+
+  // Recarregar a página (ou abrir um link #s12) volta para o slide certo.
+  var alvo = parseInt((location.hash || "").replace("#s", ""), 10);
+  if (alvo > 1 && alvo <= slides.length) {
+    slides[0].classList.remove("ativo");
+    slides[alvo - 1].classList.add("ativo");
+    atual = alvo - 1;
+  }
+  aplicarFormato();
+  atualizarHud();
+
+  // ---------- poeira radioativa ----------
+  var semMovimento = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var canvas = document.getElementById("poeira");
+  var ctx = canvas.getContext("2d");
+  var particulas = [];
+  var animando = false;
+
+  function dimensionar() {
+    var escala = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = window.innerWidth * escala;
+    canvas.height = window.innerHeight * escala;
+    ctx.setTransform(escala, 0, 0, escala, 0, 0);
+  }
+
+  function criarParticulas() {
+    var total = window.innerWidth < 700 ? 34 : 70;
+    particulas = [];
+    for (var i = 0; i < total; i++) {
+      particulas.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.8 + 0.4,
+        vx: -(Math.random() * 0.24 + 0.05),
+        vy: -(Math.random() * 0.18 + 0.03),
+        a: Math.random() * 0.4 + 0.12,
+        brasa: Math.random() > 0.86
+      });
+    }
+  }
+
+  function desenhar() {
+    if (!animando) return;
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    for (var i = 0; i < particulas.length; i++) {
+      var p = particulas[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.y < -10) { p.y = window.innerHeight + 10; p.x = Math.random() * window.innerWidth; }
+      if (p.x < -10) { p.x = window.innerWidth + 10; }
+      ctx.beginPath();
+      ctx.fillStyle = p.brasa ? "rgba(242,163,60," + p.a + ")" : "rgba(234,223,204," + (p.a * 0.5) + ")";
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(desenhar);
+  }
+
+  function ligarAtmosfera() {
+    if (semMovimento.matches) {
+      animando = false;
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      return;
+    }
+    dimensionar();
+    criarParticulas();
+    if (!animando) { animando = true; requestAnimationFrame(desenhar); }
+  }
+
+  window.addEventListener("resize", function () {
+    aplicarFormato();
+    dimensionar();
+    criarParticulas();
+  });
+
+  window.addEventListener("orientationchange", aplicarFormato);
+
+  if (semMovimento.addEventListener) {
+    semMovimento.addEventListener("change", ligarAtmosfera);
+  }
+
+  ligarAtmosfera();
+})();
+</script>
+</body>
+</html>
