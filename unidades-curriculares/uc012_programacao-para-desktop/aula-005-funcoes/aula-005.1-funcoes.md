@@ -40,3 +40,15 @@ Você foi contratado para criar a função de checkout de um e-commerce. Crie um
 - Se o cupom for estritamente igual a "BLACKFRIDAY", aplique 50% de desconto.
 - Se não for nenhum dos dois (ou for vazio), não dê desconto nenhum.
   A função deve usar o return para devolver o preço final atualizado. Teste a função com diferentes cupons e preços!
+
+## Exercícios
+
+Você precisa automatizar o fechamento de notas de uma escola. Para isso, crie uma função que calcule a média de um aluno e diga se ele passou de ano.
+Declare uma função chamada avaliarAluno.
+Configure a função para receber dois parâmetros: nota1 e nota2.
+Dentro do bloco de código (o corpo da função), crie uma variável para calcular a média dessas duas notas.
+Crie uma estrutura if/else baseada na média calculada:
+Se a média for maior ou igual a 7, use o comando return para devolver o texto "Aprovado".
+Caso contrário, use o comando return para devolver o texto "Reprovado".
+Teste a sua função (ligue a máquina) passando diferentes notas e guarde o resultado em variáveis para exibir no console.log.
+
