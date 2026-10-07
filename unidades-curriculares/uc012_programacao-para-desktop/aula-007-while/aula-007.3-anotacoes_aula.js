@@ -20,12 +20,46 @@
 // }
 // console.log("Cofre aberto em ", tentativa, "tentativas"); // Retorna: 3
 
-let contador = 10;
+// let contador = 10;
 
-while (contador >= 1) {
-  console.log(contador);
-  contador--;
-  if (contador === 1) {
-    console.log("DECOLAR");
-  }
+// while (contador >= 1) {
+//   console.log(contador);
+//   contador--;
+//   if (contador === 1) {
+//     console.log("DECOLAR");
+//   }
+// }
+
+// Resolução Exercícios
+
+// ### Exercício 02
+// let saldo = 50;
+// const passagem = 4.5;
+// let viagens = 0;
+
+// while (saldo >= passagem) {
+//   saldo = saldo - passagem;
+//   viagens++;
+//   console.log("Saldo Atual: " + saldo);
+// }
+
+// console.log(
+//   `Foram executadas ${viagens} viagens, restando o saldo de R$${saldo}`,
+// );
+
+// ### Exercício 03
+const meta = 10000;
+const valorVenda = 750;
+let total = 0;
+let vendas = 0;
+
+while (total < meta) {
+  total = total + valorVenda;
+  // total += valorVenda
+  vendas++;
+  console.log("Acumulado de Vendas: " + total);
 }
+
+console.log(
+  `Foram nessesárias ${vendas} para atingir a meta, somando R$${total}`,
+);
