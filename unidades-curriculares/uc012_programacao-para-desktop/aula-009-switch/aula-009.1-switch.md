@@ -83,3 +83,10 @@ Crie uma variável `extensao` recebendo o valor ".png". Construa um switch que a
 - Se for ".mp4" ou ".mkv", imprima: "Executando: Reprodutor de Vídeo".
 - Para qualquer outra extensão, exiba: "Erro: Nenhum aplicativo padrão associado a este formato."
 - Para qualquer outra extensão, exiba: "Erro: Nenhum aplicativo padrão associado a este formato."
+
+**Exercício 8: O Terminal Administrativo (Dificuldade Avançada)**
+Um software possui comandos de terminal que exigem privilégios diferentes. Crie duas variáveis: comando = "formatar" e privilegio = "usuario". Crie um switch avaliando o comando:
+
+- Casos "abrir" e "salvar": Imprima diretamente "Comando liberado. Executando operação...".
+- Caso "formatar": Aqui mora o desafio. Dentro deste caso, crie uma estrutura if/else. Se o privilegio for estritamente igual a "admin", imprima: "Atenção: Formatando o disco rígido principal!".
+- Senão, imprima: "Acesso Negado: Apenas administradores podem executar esta ação."Caso padrão: Imprima "Comando inexistente."- Senão, imprima: "Acesso Negado: Apenas administradores podem executar esta ação."Caso padrão: Imprima "Comando inexistente."
