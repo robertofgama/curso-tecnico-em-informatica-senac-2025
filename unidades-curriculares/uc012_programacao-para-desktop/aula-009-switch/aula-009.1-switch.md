@@ -70,6 +70,16 @@ Dê um tempo para a turma tentar resolver. Você pode contextualizar os exercíc
 - `case 5:` (como Número)
 - `default:` Dentro de cada caso, avise se ele entrou como texto, como número ou no default. Explique aos colegas por que ele entrou no caso específico (lembrando da igualdade estrita).
 
-**Exercício 5: Empilhando Casos (O uso inteligente do Fall-through)** Um aplicativo de streaming classifica seus planos. Crie uma variável `plano` (ex: "Básico", "Padrão" ou "Premium"). Se o plano for "Básico" ou "Padrão", o sistema deve imprimir: "Qualidade máxima: 1080p". Se for "Premium", deve imprimir: "Qualidade máxima: 4K". *Desafio: Resolva isso usando o `switch`, mas escrevendo o comando `console.log("Qualidade máxima: 1080p")` apenas UMA vez, empilhando dois `case`s seguidos.*
+**Exercício 5: Empilhando Casos (O uso inteligente do Fall-through)** Um aplicativo de streaming classifica seus planos. Crie uma variável `plano` (ex: "Básico", "Padrão" ou "Premium"). Se o plano for "Básico" ou "Padrão", o sistema deve imprimir: "Qualidade máxima: 1080p". Se for "Premium", deve imprimir: "Qualidade máxima: 4K". _Desafio: Resolva isso usando o `switch`, mas escrevendo o comando `console.log("Qualidade máxima: 1080p")` apenas UMA vez, empilhando dois `case`s seguidos._
 
 **Exercício 6: A Calculadora Básica** Crie três variáveis: `valor1 = 10`, `valor2 = 5` e `operacao = "+"`. Crie um `switch` que olhe para a variável `operacao`. Baseado nela, crie os casos `"+"`, `"-"`, `"*"` e `"/"`. Dentro de cada caso, faça o cálculo matemático com `valor1` e `valor2` e exiba o resultado.
+
+**Exercício 7: O Gerenciador de Arquivos do Sistema (Dificuldade Intermediária)**
+Em um sistema operacional desktop, quando o usuário clica duas vezes em um arquivo, o sistema lê a extensão e decide qual programa acionar.
+Crie uma variável `extensao` recebendo o valor ".png". Construa um switch que agrupe múltiplos casos para entregar o mesmo resultado (usando o Efeito Cascata/Fall-through de forma estratégica):
+
+- Se for ".txt" ou ".md", imprima: "Executando: Editor de Texto".
+- Se for ".jpg", ".png" ou ".gif", imprima: "Executando: Visualizador de Imagens".
+- Se for ".mp4" ou ".mkv", imprima: "Executando: Reprodutor de Vídeo".
+- Para qualquer outra extensão, exiba: "Erro: Nenhum aplicativo padrão associado a este formato."
+- Para qualquer outra extensão, exiba: "Erro: Nenhum aplicativo padrão associado a este formato."
