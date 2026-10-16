@@ -10,28 +10,34 @@ complementares de cada unidade curricular.
 
 ## 📁 Organização do repositório
 
-Todo o material está dentro da pasta [unidades-curriculares/](unidades-curriculares/),
-com **uma subpasta por matéria (unidade curricular)**:
+O material das aulas fica na pasta [unidades-curriculares/](unidades-curriculares/),
+com **uma subpasta por matéria (unidade curricular)**. Conteúdos que não pertencem a
+uma aula específica, como a apresentação da palestra sobre inteligência artificial,
+ficam em [extras/](extras/):
 
 ```text
 senac_curso-tecnico-em-informatica_2026/
 ├── README.md
+├── extras/                              # materiais complementares, como palestras
 └── unidades-curriculares/
     └── uc012_programacao-para-desktop/
         ├── README.md                    # cronograma e tópicos da unidade curricular
-        ├── aula-003/
-        │   ├── aula-003.1-operadores_aritméticos.md
-        │   └── aula-003.2_exercicios-operadores-resolucao.js
-        ├── aula-004/
-        │   └── ...
+        ├── aula-003-operadores_aritmeticos/
+        ├── aula-004-if_else/
+        ├── ...
+        ├── aula-010-arrays/
+        │   ├── aula-010.1-arrays.md                 # teoria e exercícios
+        │   ├── aula-010.2-resolucao_exercicios.js   # resolução dos exercícios
+        │   └── aula-010.3-anotacoes_aula.js         # anotações feitas ao vivo em aula
         └── ...
 ```
 
-O nome de cada subpasta segue o padrão `ucNNN_nome-da-materia`, onde `NNN` é o número
-da unidade curricular com três dígitos (a UC 12 vira `uc012`). Dentro dela há **uma
-pasta por aula** (`aula-003`, `aula-004`, ...) e, em cada uma, os arquivos numerados na
-ordem em que o conteúdo foi apresentado: o material teórico com os exercícios em `.md`
-e as resoluções e anotações de aula em `.js`.
+O nome da pasta de cada matéria segue o padrão `ucNNN_nome-da-materia`, onde `NNN` é o
+número da unidade curricular com três dígitos (a UC 12 vira `uc012`). Dentro dela há
+**uma pasta por aula**, com o número e o assunto da aula
+(`aula-003-operadores_aritmeticos`, `aula-004-if_else`, ...). Em cada uma, os arquivos
+são numerados na ordem em que o conteúdo foi apresentado: o material teórico com os
+exercícios em `.md` e as resoluções e anotações de aula em `.js`.
 
 ## 📚 Unidades curriculares
 
@@ -46,11 +52,11 @@ e as resoluções e anotações de aula em `.js`.
 
 ### Baixar o material
 
-Clone o repositório para ter todo o conteúdo na sua máquina:
+Clone o repositório para ter todo o conteúdo na sua máquina e entre na pasta criada:
 
 ```bash
-git clone git@github.com:robertofgama/Senac---Curso-T-cnico-em-Inform-tica---2026.git
-
+git clone https://github.com/robertofgama/Senac---Curso-T-cnico-em-Inform-tica---2026.git
+cd Senac---Curso-T-cnico-em-Inform-tica---2026
 ```
 
 Não usa Git? Também dá para baixar tudo em `.zip` pelo botão **Code → Download ZIP**
@@ -58,7 +64,8 @@ na página do repositório.
 
 ### Manter o material atualizado
 
-O repositório recebe conteúdo novo a cada aula. Para atualizar sua cópia local:
+O repositório recebe conteúdo novo a cada aula. Para atualizar sua cópia local, rode
+dentro da pasta do repositório:
 
 ```bash
 git pull
@@ -69,8 +76,10 @@ git pull
 - Acompanhe o código da aula rodando os exemplos na sua própria máquina — ler o
   código não substitui executá-lo.
 - Antes de olhar a solução de um exercício, tente resolvê-lo sozinho.
-- Faça suas anotações e experimentos em **cópias** dos arquivos, para não perder o
-  material original ao atualizar o repositório com `git pull`.
+- Faça suas anotações e experimentos em **cópias** dos arquivos. Se você alterar um
+  arquivo original e ele for atualizado no repositório, o `git pull` recusa a
+  atualização para não apagar o que você mudou, com a mensagem
+  `Your local changes to the following files would be overwritten by merge`.
 
 ## ❓ Dúvidas e sugestões
 
