@@ -41,4 +41,3 @@ for (let venda = 1; venda <= 7; venda++) {
     console.log(`Total do Dia: R$${acumulador}`);
   }
 }
-// Pablo eduardo, caua, dia 16
